@@ -1,25 +1,69 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import './App.scss';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  export default function App() {
+
+
+    const [Latitude, setLatitude] = useState();
+    const [Longitude, setLongitude] = useState();
+    const [weatherData, setWeatherData] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+   
+   
+    function GetCoordinates() {
+      
+        navigator.geolocation.getCurrentPosition(function(position) {
+          
+          setLatitude(position.coords.latitude);
+          setLongitude(position.coords.longitude);
+        });
+    }
+
+    useEffect(() => {
+      GetCoordinates();
+    }, [])
+
+     useEffect(() => {
+      if(!Latitude || !Longitude) return
+      let isMounted = true;
+      const request = async () => {
+        const weatherApi = `http://api.openweathermap.org/data/2.5/weather?lat=${Latitude}&lon=${Longitude}&appid=${process.env.REACT_APP_WEATHER_KEY}`;
+        const response = await fetch(weatherApi);
+        
+        const json = await response.json();
+        if (json) {setIsLoading(false)};
+        if (json) {setWeatherData(json)};
+
+        
+        //  setWeatherData(json);
+        
+      }
+
+      request();
+
+      // fetch(weatherApi)
+      // .then(res => res.json())
+      // .then(data => setWeatherData(data));
+      // console.log(weatherData);
+
+      console.log({Latitude});
+      console.log({Longitude}); 
+
+    }, [Latitude, Longitude]);
+
+    console.log(weatherData);
+    console.log(isLoading);
+return (
+  <>
+  <div className='App'>
+    <div className='container'>
+    {isLoading && <p>Wait I'm Loading comments for you</p>}
+    {weatherData && [weatherData].map(({ name}) => (
+      <p className="city-name">{weatherData.name}</p>
+    ))}
+
     </div>
-  );
+  </div>
+  </>
+ )
 }
-
-export default App;
