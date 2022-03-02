@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.scss';
-
+import DateTime from './components/dateTime';
   export default function App() {
 
 
@@ -27,7 +27,7 @@ import './App.scss';
       if(!Latitude || !Longitude) return
       let isMounted = true;
       const request = async () => {
-        const weatherApi = `http://api.openweathermap.org/data/2.5/weather?lat=${Latitude}&lon=${Longitude}&appid=${process.env.REACT_APP_WEATHER_KEY}`;
+        const weatherApi = `http://api.openweathermap.org/data/2.5/weather?lat=${Latitude}&lon=${Longitude}&units=metric&appid=${process.env.REACT_APP_WEATHER_KEY}`;
         const response = await fetch(weatherApi);
         
         const json = await response.json();
@@ -53,15 +53,22 @@ import './App.scss';
 
     console.log(weatherData);
     console.log(isLoading);
+    console.log(weatherData);
+
+    
 return (
   <>
   <div className='App'>
     <div className='container'>
     {isLoading && <p>Wait I'm Loading comments for you</p>}
-    {weatherData && [weatherData].map(({ name}) => (
+    {weatherData && [JSON.stringify(weatherData)].map(({ name, main }) => (
+      <>
       <p className="city-name">{weatherData.name}</p>
+      <p>{`Humidity: ${(weatherData.main.humidity)}%`}</p>
+      <p className="city-name">{`Temp:${weatherData.main.temp} °C`}</p>
+      <p><DateTime/></p>
+      </>
     ))}
-
     </div>
   </div>
   </>
