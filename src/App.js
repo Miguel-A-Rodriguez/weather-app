@@ -63,10 +63,14 @@ return (
     {isLoading && <p>Wait I'm Loading comments for you</p>}
     {weatherData && [JSON.stringify(weatherData)].map(({ name, main }) => (
       <>
-      <p className="city-name">{weatherData.name}</p>
-      <p>{`Humidity: ${(weatherData.main.humidity)}%`}</p>
+      <div className='flex-container'>
+        <p className="city-name">{weatherData.name}</p>
+        <p>{`Humidity: ${(weatherData.main.humidity)}%`}</p>
+      </div>
+      <div className='flex-container'>
       <p className="city-name">{`Temp:${weatherData.main.temp} °C`}</p>
       <p><DateTime/></p>
+      </div>
       </>
     ))}
     </div>

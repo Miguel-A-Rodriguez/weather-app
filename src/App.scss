@@ -21,3 +21,8 @@
   mix-blend-mode: difference;
   user-select: none;
 }
+
+.container .flex-container {
+  display: flex;
+  justify-content: space-between;
+}
